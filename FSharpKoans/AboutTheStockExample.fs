@@ -18,7 +18,7 @@ open FSharpKoans.Core
 //
 // Hint: Use CultureInfo.InvariantCulture to always parse '.' as 
 // the decimal point.
-//
+// => Kompletter Namespace: System.Globalization.CultureInfo.InvariantCulture (ohne nutzlos)
 // The following function will convert a comma separated string
 // into an array of the column values.
 //                       
@@ -60,6 +60,19 @@ module ``about the stock example`` =
 
     [<Koan>]
     let YouGotTheAnswerCorrect() =
-        let result =  __
+        let splitCommas (x:string) =
+            x.Split([|','|])
+        
+        let data = 
+            stockData
+            |> List.tail
+            |> List.map splitCommas
+            |> List.maxBy (fun entry ->
+                let openValue = System.Double.Parse(entry.[1], System.Globalization.CultureInfo.InvariantCulture)
+                let closeValue = System.Double.Parse(entry.[4], System.Globalization.CultureInfo.InvariantCulture) 
+                abs(openValue - closeValue)
+                )
+
+        let result =  data.[0]
         
         AssertEquality "2012-03-13" result
